@@ -1,0 +1,9 @@
+# data files and backups are never published here
+*.bak
+*.mdf
+*.ldf
+*.csv
+*.zip
+# local settings and secrets
+.env
+*.pfx

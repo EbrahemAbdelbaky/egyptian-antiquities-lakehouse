@@ -1,0 +1,176 @@
+{
+  "source": "G_ALL_gold.sql run on the project server (all checks executed in one pass)",
+  "run_finished": "2026-11-21T01:19:16+02:00",
+  "checks_run": 24,
+  "checks_ok": 24,
+  "checks": [
+    {
+      "seq": 1,
+      "step": "G1",
+      "check_name": "dim_museum has 3 rows",
+      "detail": "3 rows, expected 3",
+      "result": "OK"
+    },
+    {
+      "seq": 2,
+      "step": "G1",
+      "check_name": "every Silver row finds its museum",
+      "detail": "69762 Silver rows, 0 without a museum",
+      "result": "OK"
+    },
+    {
+      "seq": 3,
+      "step": "G2",
+      "check_name": "dim_era has 14 rows (13 periods + Undated)",
+      "detail": "14 rows, expected 14",
+      "result": "OK"
+    },
+    {
+      "seq": 4,
+      "step": "G2",
+      "check_name": "the period bands touch each other (no gaps, no overlaps)",
+      "detail": "12 band pairs, 0 gaps or overlaps",
+      "result": "OK"
+    },
+    {
+      "seq": 5,
+      "step": "G2",
+      "check_name": "every core artifact lands in exactly one period, or in Undated when it has no year",
+      "detail": "69250 artifacts: 8593 undated, 60657 placed in a period",
+      "result": "OK"
+    },
+    {
+      "seq": 6,
+      "step": "G3",
+      "check_name": "dim_site has one row per distinct site text + the \"no site\" row",
+      "detail": "1057 rows, expected 1057",
+      "result": "OK"
+    },
+    {
+      "seq": 7,
+      "step": "G3",
+      "check_name": "every artifact that has a site text finds its row in dim_site",
+      "detail": "33128 artifacts with a site text, 0 without a site row",
+      "result": "OK"
+    },
+    {
+      "seq": 8,
+      "step": "G4",
+      "check_name": "dim_ruler has one row per distinct ruler + one \"no ruler recorded\" row per period",
+      "detail": "221 rows, expected 221",
+      "result": "OK"
+    },
+    {
+      "seq": 9,
+      "step": "G4",
+      "check_name": "map_reign_to_ruler has one row per museum text that names a ruler (Met reign texts + Louvre date-text rulers + Cleveland culture texts)",
+      "detail": "789 rows, expected 789",
+      "result": "OK"
+    },
+    {
+      "seq": 10,
+      "step": "G4",
+      "check_name": "every artifact that names a ruler (Met reign text, Louvre date-text ruler, Cleveland culture text) finds its ruler",
+      "detail": "16468 artifacts naming a ruler, 0 without a map row",
+      "result": "OK"
+    },
+    {
+      "seq": 11,
+      "step": "G4",
+      "check_name": "every period has one \"no ruler recorded\" row, and its key equals the period key",
+      "detail": "14 rows for 14 periods, 14 with key = period key",
+      "result": "OK"
+    },
+    {
+      "seq": 12,
+      "step": "G4",
+      "check_name": "every named ruler has its spelling(s) in ruler_name_variant, and its shown name is one of them",
+      "detail": "207 named rulers, 207 with a spelling, 0 whose name is not among the spellings",
+      "result": "OK"
+    },
+    {
+      "seq": 13,
+      "step": "G5",
+      "check_name": "rows per museum equal the core rows of Silver",
+      "detail": "Cleveland 1381, Louvre 39710, Met 28159",
+      "result": "OK"
+    },
+    {
+      "seq": 14,
+      "step": "G5",
+      "check_name": "total rows = 69250 (Met 28159 + Cleveland 1381 + Louvre 39710)",
+      "detail": "69250 rows, expected 69250",
+      "result": "OK"
+    },
+    {
+      "seq": 15,
+      "step": "G5",
+      "check_name": "the documentation flags equal the numbers verified in Bronze and Silver",
+      "detail": "10 of 10 counts equal",
+      "result": "OK"
+    },
+    {
+      "seq": 16,
+      "step": "G5",
+      "check_name": "the missing members agree with the flags (no site, no ruler recorded, no ruler and no year)",
+      "detail": "36122 no site, 52782 under no ruler recorded, 8593 of them undated",
+      "result": "OK"
+    },
+    {
+      "seq": 17,
+      "step": "G5",
+      "check_name": "every artifact reaches exactly one period through its ruler (fact - ruler - period)",
+      "detail": "69250 of 69250 artifacts reach a period",
+      "result": "OK"
+    },
+    {
+      "seq": 18,
+      "step": "G5",
+      "check_name": "an artifact without a ruler sits in the period of its own dates (Undated when it has no year)",
+      "detail": "52782 of 52782 artifacts without a ruler",
+      "result": "OK"
+    },
+    {
+      "seq": 19,
+      "step": "G6",
+      "check_name": "the seven views exist",
+      "detail": "7 views, expected 7",
+      "result": "OK"
+    },
+    {
+      "seq": 20,
+      "step": "G6",
+      "check_name": "the \"site\" lines of the gap view equal the artifacts with site_key 0 in the fact table",
+      "detail": "Cleveland 1375, Louvre 25635, Met 9112",
+      "result": "OK"
+    },
+    {
+      "seq": 21,
+      "step": "G6",
+      "check_name": "the hierarchy, era and museum views cover every artifact, the site map every artifact with a site",
+      "detail": "69250 / 69250 / 69250 of 69250 artifacts; map 33128 of 33128 with a site",
+      "result": "OK"
+    },
+    {
+      "seq": 22,
+      "step": "G7",
+      "check_name": "ml_dataset holds all core Met artifacts: 19047 labeled + 9112 to_predict",
+      "detail": "28159 rows: 19047 labeled, 9112 to_predict",
+      "result": "OK"
+    },
+    {
+      "seq": 23,
+      "step": "G7",
+      "check_name": "the random split is about 80 / 20",
+      "detail": "15209 train, 3838 test (79.8% train)",
+      "result": "OK"
+    },
+    {
+      "seq": 24,
+      "step": "G7",
+      "check_name": "the rows to predict carry no target and no split",
+      "detail": "9112 rows to predict, 0 break the rule",
+      "result": "OK"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+Fonts used by Gold Explorer (subset to Latin letters, digits and common punctuation)
+
+  serif-*  Gold Serif  = subset of TeX Gyre Pagella  GUST Font License (free to use and to embed)   https://www.gust.org.pl/projects/e-foundry/tex-gyre
+  sans-*   Gold Sans   = subset of Carlito           SIL Open Font License 1.1                       https://github.com/googlefonts/carlito
+  mono-*   DejaVu Sans Mono                          Bitstream Vera / DejaVu licence (free to use)    https://dejavu-fonts.github.io
+
+The sans and serif files are subsets of the original fonts (glyphs removed, nothing else changed). Their internal names were changed
+to Gold Sans and Gold Serif, because the Carlito licence reserves the name "Carlito" for unmodified copies and the GUST licence asks
+that modified copies take another name. The copyright lines stay in the files.
+The licence texts are in web/licenses (published with the site).
+The three families are registered in pubspec.yaml as GoldSerif, GoldSans and GoldMono.
