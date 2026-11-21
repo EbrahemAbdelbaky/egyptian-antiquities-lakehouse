@@ -5,7 +5,6 @@ on:
     branches: [main]
     paths:
       - 'app/**'
-      - 'offline/**'
       - '.github/workflows/pages.yml'
   workflow_dispatch:
 
@@ -30,67 +29,11 @@ jobs:
           channel: stable
           cache: true
 
-      # 1) The offline copy: base href "/" and no CDN (CanvasKit and fonts come from the package itself).
-      #    If this step fails the normal site is still built and published; only the zip is missing.
-      - name: Build the offline copy
-        id: offline
-        continue-on-error: true
-        working-directory: app
-        run: |
-          flutter pub get
-          flutter build web --release --base-href "/" --no-web-resources-cdn
-          rm -rf "$RUNNER_TEMP/site"
-          cp -r build/web "$RUNNER_TEMP/site"
-          test -f "$RUNNER_TEMP/site/index.html"
-          test -f "$RUNNER_TEMP/site/main.dart.js"
-          rm -rf build/web
-
-      # 2) The normal site for GitHub Pages
       - name: Build the site
         working-directory: app
         run: |
           flutter pub get
           flutter build web --release --base-href "/${{ github.event.repository.name }}/"
-
-      # 3) Put the offline copy and the launcher in one zip next to the site
-      - name: Pack the offline zip
-        id: pack
-        if: steps.offline.outcome == 'success'
-        continue-on-error: true
-        run: |
-          PKG="$RUNNER_TEMP/gold-explorer-offline"
-          rm -rf "$PKG"
-          mkdir -p "$PKG"
-          cp -r "$RUNNER_TEMP/site" "$PKG/site"
-          cp offline/start_gold_explorer.bat offline/serve.ps1 offline/README.txt "$PKG/"
-          (cd "$RUNNER_TEMP" && zip -qr "$GITHUB_WORKSPACE/app/build/web/gold-explorer-offline.zip" gold-explorer-offline)
-          ls -l app/build/web/gold-explorer-offline.zip
-
-      - name: Report what is in the offline zip
-        if: always()
-        run: |
-          {
-            echo "## Offline package"
-            echo
-            echo "- offline build: \`${{ steps.offline.outcome }}\`"
-            echo "- zip packed: \`${{ steps.pack.outcome }}\`"
-            if [ -f app/build/web/gold-explorer-offline.zip ]; then
-              echo "- size: $(stat -c %s app/build/web/gold-explorer-offline.zip) bytes"
-              echo
-              echo "### Local CanvasKit settings found in the offline build"
-              echo '```'
-              grep -rhoE 'canvasKitBaseUrl[^,}]{0,80}' "$RUNNER_TEMP/site" --include='*.js' --include='*.html' | sort -u | head -10 || true
-              echo '```'
-              echo "### Files with an external gstatic/googleapis address (information only)"
-              echo '```'
-              grep -rlE 'gstatic\.com|googleapis\.com' "$RUNNER_TEMP/site" | head -10 || true
-              echo '```'
-              echo "### Contents"
-              echo '```'
-              unzip -l app/build/web/gold-explorer-offline.zip | awk '{print $1, $4}' | grep -vE '^[0-9]+ gold-explorer-offline/site/(assets/|icons/)' | head -80
-              echo '```'
-            fi
-          } >> "$GITHUB_STEP_SUMMARY"
 
       - uses: actions/configure-pages@v5
 
