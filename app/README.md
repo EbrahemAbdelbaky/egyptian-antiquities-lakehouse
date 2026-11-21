@@ -1,5 +1,7 @@
 # Gold Explorer (Flutter web)
 
+Live: https://ebrahemabdelbaky.github.io/egyptian-antiquities-lakehouse/
+
 The site that shows the Gold layer of the Egyptian Antiquities Provenance Lakehouse. It reads two exported files and calls no server:
 
 - `assets/gold_data.json`: the Gold tables, samples and views (written by `export_gold_json.ps1` from the SQL Server database)
